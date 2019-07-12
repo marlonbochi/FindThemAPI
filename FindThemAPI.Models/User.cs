@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace FindThemAPI.Models
 {
+    [Table("user")]
     public class User
     {
         public Int64 id { get; set; }

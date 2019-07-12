@@ -2,6 +2,7 @@
 using FindThemAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace FindThemAPI.Controllers
 {
@@ -16,7 +17,9 @@ namespace FindThemAPI.Controllers
 
             using (var db = new FindThemContext())
             {
-                clients = db.Clients.ToList();
+                clients = db.Clients
+                            .Include(user => user.user)
+                            .ToList();
             }
 
             return clients;
@@ -28,7 +31,9 @@ namespace FindThemAPI.Controllers
 
             using (var db = new FindThemContext())
             {
-                client = db.Clients.Where(x => x.id == id).First();
+                client = db.Clients
+                           .Include(user => user.user)
+                           .First(x => x.id == id);
             }
 
             return client;

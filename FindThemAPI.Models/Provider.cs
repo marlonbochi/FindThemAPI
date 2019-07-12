@@ -1,8 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FindThemAPI.Models
 {
-    public class Provider : User
+    [Table("provider")]
+    public class Provider
     {
+        public Int64 id { get; set; }
+
+        public User user { get; set; }
     }
 }
