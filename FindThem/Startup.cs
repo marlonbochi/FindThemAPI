@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 
-namespace FindThemAPI
+namespace FindThem
 {
     public class Startup
     {
@@ -37,9 +37,9 @@ namespace FindThemAPI
                 c.SwaggerDoc("v1",
                     new Info
                     {
-                        Title = "Find Them API",
+                        Title = "Find Them",
                         Version = "v1",
-                        Description = "API do app Find Them API",
+                        Description = "API do app Find Them",
                         Contact = new Contact
                         {
                             Name = "Marlon Bochi",
@@ -77,7 +77,7 @@ namespace FindThemAPI
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json",
-                    "Find Them API");
+                    "Find Them");
             });
 
             app.UseMvc();
