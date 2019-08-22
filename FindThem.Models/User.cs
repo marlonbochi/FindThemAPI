@@ -19,5 +19,7 @@ namespace FindThem.Models
         [Required]
         public string password { get; set; }
 
+        public string photo { get; set; }
+
     }
 }
