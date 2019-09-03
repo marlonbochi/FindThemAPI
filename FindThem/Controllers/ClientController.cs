@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FindThem.Controllers
 {
     //[Route("api/[controller]")]
     [Route("api/client")]
     [ApiController]
+    [Authorize]
     public class ClientController : ControllerBase
     {
         [HttpGet("FindAll")]
@@ -47,22 +49,31 @@ namespace FindThem.Controllers
         }
 
         [HttpPost("create")]
+        [AllowAnonymous]
         public IActionResult create([FromBody]Client client)
         {
             using (var db = new FindThemContext())
             {
-                var user = db.Users.FirstOrDefault(x => x.id == client.user.id);
+                try
+                {
+                    var user = db.Users.FirstOrDefault(x => x.id == client.user.id);
 
-                if (user != null)
-                {
-                    client.user = user;
-                } else
-                {
-                    client.user.password = Utils.GetMd5HashPassword(client.user.password);
+                    if (user != null)
+                    {
+                        client.user = user;
+                    }
+                    else
+                    {
+                        client.user.password = Utils.GetMd5HashPassword(client.user.password);
+                    }
+
+                    db.Clients.Add(client);
+                    db.SaveChanges();
                 }
-
-                db.Clients.Add(client);
-                db.SaveChanges();
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
 
             return Ok(client);
@@ -73,7 +84,8 @@ namespace FindThem.Controllers
         {
             Client client = new Client();
 
-            if (key == "password") {
+            if (key == "password")
+            {
                 value = Utils.GetMd5HashPassword(value);
             }
 
@@ -97,10 +109,11 @@ namespace FindThem.Controllers
                     db.Clients.Update(client);
                     db.SaveChanges();
 
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     return NotFound(ex.Message);
-                } 
+                }
             }
 
             return Ok(client);

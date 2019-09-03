@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FindThem.Controllers
 {
     [Route("api/provider")]
     [ApiController]
+    [Authorize]
     public class ProviderController : ControllerBase
     {
         [HttpGet("findAll")]
@@ -45,19 +47,31 @@ namespace FindThem.Controllers
         }
 
         [HttpPost("create")]
+        [AllowAnonymous]
         public IActionResult Create([FromBody]Provider provider)
         {
             using (var db = new FindThemContext())
             {
-                var user = db.Users.FirstOrDefault(x => x.id == provider.user.id);
-
-                if (user != null)
+                try
                 {
-                    provider.user = user;
-                }
+                    var user = db.Users.FirstOrDefault(x => x.id == provider.user.id);
 
-                db.Providers.Add(provider);
-                db.SaveChanges();
+                    if (user != null)
+                    {
+                        provider.user = user;
+                    }
+                    else
+                    {
+                        provider.user.password = Utils.GetMd5HashPassword(provider.user.password);
+                    }
+
+                    db.Providers.Add(provider);
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
 
             return Ok(provider);

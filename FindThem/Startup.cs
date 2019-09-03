@@ -6,8 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.AspNetCore.Http;
+using Swashbuckle.AspNetCore;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
+using System.Collections.Generic;
 
 namespace FindThem
 {
@@ -30,10 +38,38 @@ namespace FindThem
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                config.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration["Authentication:Issuer"],
+
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Authentication:Audience"],
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:SecretKey"])),
+
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
 
             services.AddSwaggerGen(c =>
             {
+
                 c.SwaggerDoc("v1",
                     new Info
                     {
@@ -55,6 +91,14 @@ namespace FindThem
                     Path.Combine(caminhoAplicacao, $"{nomeAplicacao}.xml");
 
                 c.IncludeXmlComments(caminhoXmlDoc);
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme()
+                { In = "header", Description = "Please insert JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
+
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>()
+                {
+                  { "Bearer", new string[]{ } }
+                });
             });
         }
 
@@ -70,15 +114,19 @@ namespace FindThem
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
 
             // Ativando middlewares para uso do Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
+
                 c.SwaggerEndpoint("/swagger/v1/swagger.json",
                     "Find Them");
             });
+
+            app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseMvc();
         }
