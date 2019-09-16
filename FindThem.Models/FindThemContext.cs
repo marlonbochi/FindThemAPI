@@ -31,5 +31,7 @@ namespace FindThem.Models
         public DbSet<Provider> Providers { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<Rate> Rates { get; set; }
+        public DbSet<Payment> Payments { get; set; }
     }
 }
