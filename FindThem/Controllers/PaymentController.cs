@@ -11,6 +11,7 @@ namespace FindThem.Controllers
 {
     [Route("api/payment")]
     [ApiController]
+    [Authorize]
     public class PaymentController : ControllerBase
     {
 
@@ -21,10 +22,16 @@ namespace FindThem.Controllers
 
             using (var db = new FindThemContext())
             {
-                payment = db.Payments
+                try
+                {
+                    payment = db.Payments
                             .Where(x => x.enabled == true && x.id == id)
                            .FirstOrDefault(x => x.id == id);
-
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
 
             return Ok(payment);
@@ -37,8 +44,15 @@ namespace FindThem.Controllers
         {
             using (var db = new FindThemContext())
             {
-                db.Payments.Add(payment);
-
+                try
+                {
+                    payment = db.Payments.Add(payment).Entity;
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
 
             return Ok(payment);

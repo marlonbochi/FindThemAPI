@@ -14,6 +14,48 @@ namespace FindThem.Controllers
     [Authorize]
     public class RequestController : ControllerBase
     {
+        [HttpGet("{requestID}")]
+        public IActionResult get(Int64 requestID)
+        {
+            var request = new Request();
+            using (var db = new FindThemContext())
+            {
+                try
+                {
+                    request = db.Requests
+                                .Where(x => x.id == requestID)
+                                .FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return Ok(request);
+        }
+
+        [HttpGet("findAll")]
+        public IActionResult FindAll()
+        {
+            var requests = new List<Request>();
+            using (var db = new FindThemContext())
+            {
+                try
+                {
+                    requests = db.Requests
+                                 .Where(x => x.enabled == true)
+                                 .ToList();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return Ok(requests);
+        }
+
         [HttpPost("create")]
         public IActionResult Create([FromBody]Request request)
         {

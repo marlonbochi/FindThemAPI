@@ -11,6 +11,7 @@ namespace FindThem.Controllers
 {
     [Route("api/rate")]
     [ApiController]
+    [Authorize]
     public class RateController : ControllerBase
     {
         [HttpGet("{id}")]
@@ -20,9 +21,33 @@ namespace FindThem.Controllers
 
             using (var db = new FindThemContext())
             {
-                rate = db.Rates
-                            .Where(x => x.enabled == true && x.id == id)
-                           .FirstOrDefault(x => x.id == id);
+                try
+                {
+                        rate = db.Rates
+                                .Where(x => x.enabled == true && x.id == id)
+                               .FirstOrDefault(x => x.id == id);
+                } catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return Ok(rate);
+        }
+
+        [HttpPost]
+        public IActionResult Set([FromBody] Rate rate)
+        {
+            using (var db = new FindThemContext())
+            {
+                try
+                {
+                    rate = db.Rates
+                                .Add(rate).Entity;
+                } catch(Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
 
             return Ok(rate);

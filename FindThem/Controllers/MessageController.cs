@@ -10,6 +10,7 @@ namespace FindThem.Controllers
 {
     [Route("api/message")]
     [ApiController]
+    [Authorize]
     public class MessageController : ControllerBase
     {
         [HttpGet("{requestID}")]
@@ -34,6 +35,7 @@ namespace FindThem.Controllers
             {
                 message = db.Messages
                             .Add(message).Entity;
+                db.SaveChanges();
             }
 
             return Ok(message);
