@@ -29,5 +29,19 @@ namespace FindThem.Controllers
 
             return Ok(payment);
         }
+
+
+
+        [HttpPost("pay")]
+        public IActionResult Pay([FromBody] Payment payment)
+        {
+            using (var db = new FindThemContext())
+            {
+                db.Payments.Add(payment);
+
+            }
+
+            return Ok(payment);
+        }
     }
 }

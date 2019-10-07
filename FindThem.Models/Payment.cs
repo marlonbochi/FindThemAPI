@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FindThem.Models
 {
+    [Table("payment")]
     public class Payment : Shared
     {
         [ForeignKey("requestID")]

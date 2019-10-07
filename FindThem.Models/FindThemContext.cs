@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System;
 
 namespace FindThem.Models
 {
@@ -19,10 +20,31 @@ namespace FindThem.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>()
-                .HasOne<User>(a => a.user);
+                .Property<Int64>("userID");
 
             modelBuilder.Entity<Provider>()
-                .HasOne(b => b.user);
+                .Property<Int64>("userID");
+
+            modelBuilder.Entity<Request>()
+                .Property<Int64>("clientID");
+
+            modelBuilder.Entity<Request>()
+                .Property<Int64>("providerID");
+
+            modelBuilder.Entity<Request>()
+                .Property<Int64>("serviceID");
+
+            modelBuilder.Entity<Service>()
+                .Property<Int64>("providerID");
+
+            modelBuilder.Entity<Payment>()
+                .Property<Int64>("requestID");
+
+            modelBuilder.Entity<Message>()
+                .Property<Int64>("requestID");
+
+            modelBuilder.Entity<Log>()
+                .Property<Int64>("userID");
 
         }
 
@@ -33,5 +55,7 @@ namespace FindThem.Models
         public DbSet<Service> Services { get; set; }
         public DbSet<Rate> Rates { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Log> Logs { get; set; }
     }
 }
