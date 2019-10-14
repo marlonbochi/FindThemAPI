@@ -129,6 +129,18 @@ namespace FindThem
             app.UseAuthentication();
 
             app.UseMvc();
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+                var path = context.Request.Path.Value;
+                if (context.Response.StatusCode == 404 && !Path.HasExtension(path) && !path.StartsWith("/api"))
+                {
+                    context.Request.Path = "/index.html";
+                    await next();
+                }
+            });
+            app.UseStaticFiles();
         }
     }
 }
