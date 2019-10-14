@@ -15,6 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="App\App.vue" />
+    <None Remove="App\Build\config.js" />
+    <None Remove="App\Build\webpack.config.js" />
+    <None Remove="App\main.js" />
+    <None Remove="App\Pages\Home.vue" />
+    <None Remove="App\Pages\Login.vue" />
+    <None Remove="App\router.js" />
     <None Remove="FindThem.xml" />
   </ItemGroup>
 
@@ -23,14 +30,33 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="App\App.vue">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\Build\config.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\Build\webpack.config.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\main.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\Pages\Home.vue">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\Pages\Login.vue">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App\router.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="FindThem.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="App\Build\" />
-    <Folder Include="App\Pages\" />
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
@@ -56,6 +82,30 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FindThem.Models\FindThem.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\login.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\css\login.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\css\main.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\css\main.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\js\app-settings.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\js\bundle.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
