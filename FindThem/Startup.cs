@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace FindThem
 {
@@ -45,7 +46,9 @@ namespace FindThem
                     .Build();
 
                 config.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddControllersAsServices();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -100,6 +103,8 @@ namespace FindThem
                   { "Bearer", new string[]{ } }
                 });
             });
+
+            //services.AddMvc().AddControllersAsServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,8 +131,6 @@ namespace FindThem
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-
             app.UseMvc();
 
             app.Use(async (context, next) =>
@@ -140,7 +143,14 @@ namespace FindThem
                     await next();
                 }
             });
-            app.UseStaticFiles();
+            app.UseStaticFiles(); 
+            
+            app.UseCors("AllowAll");
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
         }
     }
 }

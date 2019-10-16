@@ -1,7 +1,7 @@
 
 <template>
     <div>
-        Home - <strong>{{</strong> message <strong>}}</strong>
+        Home - <strong>{{message}}</strong>
     </div>
 </template>
 <script>

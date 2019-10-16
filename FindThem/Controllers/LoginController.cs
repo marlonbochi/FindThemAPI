@@ -15,7 +15,6 @@ namespace FindThem.Controllers
 {
     [Route("api/login")]
     [ApiController]
-    [Authorize]
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _config;
@@ -25,9 +24,9 @@ namespace FindThem.Controllers
             _config = config;
         }
 
-        [HttpPost]
+        [HttpPost("signIn")]
         [AllowAnonymous]
-        public IActionResult post(string login, string password)
+        public ActionResult signIn([FromForm]string login, [FromForm]string password)
         {
             var user = new User();
 
@@ -42,7 +41,7 @@ namespace FindThem.Controllers
 
             if (user == null)
             {
-                return Unauthorized();
+                return Ok(new { message= "User not found." });
             }
 
             var claims = new[]
