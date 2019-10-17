@@ -57,7 +57,7 @@ namespace FindThem.Controllers
             (
                 claims: claims,
                 signingCredentials: credential,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.Now.AddDays(7),
                 issuer: _config["Authentication:Issuer"],
                 audience: _config["Authentication:Audience"]
             );

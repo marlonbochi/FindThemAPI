@@ -1,5 +1,7 @@
-﻿export default class Services {
+﻿import moment from "moment";
 
+export default class Services {
+    
     setCookie(name, value, days) {
         var expires = "";
         if (days) {
@@ -23,5 +25,30 @@
 
     eraseCookie(name) {
         document.cookie = name + '=; Max-Age=-99999999;';
+    }
+
+    validateToken() {
+
+        if (!sessionStorage.getItem('tokenID')) {
+            let tokenID = this.getCookie("tokenID");
+            let tokenExpiration = this.getCookie("tokenExpiration");
+
+            if (tokenID != null) {
+                sessionStorage.setItem('tokenID', tokenID);
+                sessionStorage.setItem('tokenExpiration', tokenExpiration);
+            } else {
+                window.location.href = "/login";
+            } 
+        } else {
+
+            let dateExpiration = moment(sessionStorage.getItem('tokenExpiration'));
+
+            if (dateExpiration < moment()) {
+                this.eraseCookie("tokenID");
+                this.eraseCookie("tokenExpiration");
+
+                window.location.href = "/login";
+            }
+        }
     }
 }

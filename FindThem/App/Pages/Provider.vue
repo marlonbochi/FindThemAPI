@@ -1,7 +1,10 @@
 
 <template>
-    <div id="Home">
+    <div id="provider">
         <header-menu ref="headerMenu" />
+        <div class="container">
+            Prestador de serviço - <strong>{{message}}</strong>
+        </div>
     </div>
 </template>
 <script>
@@ -9,7 +12,7 @@
     import HeaderMenu from "./HeaderMenu.vue";
 
     export default {
-        name: "Home",
+        name: 'provider',
         components: {
             "headerMenu": HeaderMenu
         },
@@ -18,6 +21,8 @@
                 message: 'Data from Home',
                 services: new Services()
             };
+        },
+        mounted: function () {
         }
     };
 </script>

@@ -65,7 +65,7 @@
                     sessionStorage.setItem('tokenID', data.token);
                     sessionStorage.setItem('tokenExpiration', data.expiration);
 
-                    window.location.href = "/";
+                    self.$router.push("/");
                     
                 }).catch(function (error) {
                     self.message = error.message;
