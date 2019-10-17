@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindThem", "FindThem\FindTh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindThem.Models", "FindThem.Models\FindThem.Models.csproj", "{2185D8CE-D180-48B0-8F51-B96F5134F8AD}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "FindThem.SPA", "FindThem.SPA\FindThem.SPA.njsproj", "{19FC2597-5087-453B-AC1A-22F33A797704}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2185D8CE-D180-48B0-8F51-B96F5134F8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2185D8CE-D180-48B0-8F51-B96F5134F8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2185D8CE-D180-48B0-8F51-B96F5134F8AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19FC2597-5087-453B-AC1A-22F33A797704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19FC2597-5087-453B-AC1A-22F33A797704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19FC2597-5087-453B-AC1A-22F33A797704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19FC2597-5087-453B-AC1A-22F33A797704}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

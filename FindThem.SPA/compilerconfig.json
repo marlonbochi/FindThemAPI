@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "public/css/login.css",
+    "inputFile": "public/css/login.scss"
+  },
+  {
+    "outputFile": "public/css/main.css",
+    "inputFile": "public/css/main.scss"
+  }
+]

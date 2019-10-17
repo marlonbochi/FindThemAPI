@@ -105,6 +105,13 @@ namespace FindThem
             });
 
             //services.AddMvc().AddControllersAsServices();
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,6 +126,7 @@ namespace FindThem
                 app.UseHsts();
             }
 
+            app.UseCors("MyPolicy");
 
             // Ativando middlewares para uso do Swagger
             app.UseSwagger();
@@ -131,21 +139,22 @@ namespace FindThem
 
             app.UseHttpsRedirection();
 
-            app.UseMvc();
-
             app.Use(async (context, next) =>
             {
                 await next();
                 var path = context.Request.Path.Value;
-                if (context.Response.StatusCode == 404 && !Path.HasExtension(path) && !path.StartsWith("/api"))
+
+                if (!path.StartsWith("/api") && !Path.HasExtension(path))
                 {
                     context.Request.Path = "/index.html";
                     await next();
                 }
             });
-            app.UseStaticFiles(); 
-            
-            app.UseCors("AllowAll");
+
+            app.UseStaticFiles();
+            app.UseDefaultFiles();
+
+            app.UseMvc();
 
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {

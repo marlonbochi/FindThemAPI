@@ -9,12 +9,11 @@
     export default {
         data() {
             return {
-                message: 'Message from App.vue',
                 services: new Services()
             };
         },
         mounted: function () {
-            
+
         }
     };
 </script>
