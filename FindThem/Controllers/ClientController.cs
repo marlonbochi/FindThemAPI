@@ -15,7 +15,7 @@ namespace FindThem.Controllers
     public class ClientController : ControllerBase
     {
         [HttpGet("FindAll")]
-        public IActionResult findAll()
+        public IActionResult findAll(int page)
         {
             var clients = new List<Client>();
 
@@ -56,15 +56,25 @@ namespace FindThem.Controllers
             {
                 try
                 {
-                    var user = db.Users.FirstOrDefault(x => x.id == client.user.id);
+                    var user = db.Users.FirstOrDefault(x => x.email == client.user.email);
 
-                    if (user != null)
+                    client.user.password = Utils.GetMd5HashPassword(client.user.password);
+
+                    if (user == null)
                     {
+                        client.user = db.Users.Add(client.user).Entity;
+                        db.SaveChanges();
+                    } else
+                    {
+                        user.email = client.user.email;
+                        user.name = client.user.name;
+                        user.password = client.user.password;
+                        user.photo = client.user.photo;
+
+                        db.Users.Update(user);
+                        db.SaveChanges();
+
                         client.user = user;
-                    }
-                    else
-                    {
-                        client.user.password = Utils.GetMd5HashPassword(client.user.password);
                     }
 
                     db.Clients.Add(client);
@@ -72,39 +82,36 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok(client);
+            return Ok(new { success = true, message = "Register created with success", data = client });
         }
 
-        [HttpPost("edit/{id}")]
-        public IActionResult edit(Int64 id, string key, string value)
+        [HttpPost("edit")]
+        public IActionResult edit([FromBody]Client client)
         {
-            Client client = new Client();
 
-            if (key == "password")
+            if (client.user.password != string.Empty)
             {
-                value = Utils.GetMd5HashPassword(value);
+                client.user.password = Utils.GetMd5HashPassword(client.user.password);
             }
 
             using (var db = new FindThemContext())
             {
-                client = db.Clients
-                           .Include(user => user.user)
-                           .FirstOrDefault(x => x.id == id);
-
-                var arraykeys = key.Split(".");
-
-                if (client == null)
-                {
-                    return NotFound("Client not found.");
-                }
-
                 try
                 {
-                    client = Client.Update(client, key, value);
+                    var user = db.Users.FirstOrDefault(x => x.id == client.user.id);
+
+                    user.email = client.user.email;
+                    user.name = client.user.name;
+                    user.photo = client.user.photo;
+
+                    db.Users.Update(user);
+                    db.SaveChanges();
+
+                    client.user = user;
 
                     db.Clients.Update(client);
                     db.SaveChanges();
@@ -112,11 +119,11 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return NotFound(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok(client);
+            return Ok(new { success = true, message = "Register edited with success", data = client });
         }
 
         [HttpDelete("delete/{id}")]
@@ -137,11 +144,11 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok();
+            return Ok(new { success = true, message = "Register deleted with success" });
         }
     }
 }

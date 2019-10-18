@@ -14,6 +14,11 @@
         },
         mounted: function () {
 
+            if (window.location.href.indexOf("localhost") > 0) {
+                sessionStorage.setItem("urlAPI", "https://localhost:44357");
+            } else {
+                sessionStorage.setItem("urlAPI", "");
+            }
         }
     };
 </script>

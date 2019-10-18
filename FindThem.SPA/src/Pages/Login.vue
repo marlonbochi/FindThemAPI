@@ -45,7 +45,7 @@
                 data.append('login', self.username);
                 data.append('password', self.password);
 
-                axios.post('/api/login/signin',
+                axios.post(sessionStorage.getItem("urlAPI") + '/api/login/signin',
                     data
                 ).then(function (response) {
 

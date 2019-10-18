@@ -39,37 +39,6 @@ namespace FindThem
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc(config =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-
-                config.Filters.Add(new AuthorizeFilter(policy));
-            })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddControllersAsServices();
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = Configuration["Authentication:Issuer"],
-
-                        ValidateAudience = true,
-                        ValidAudience = Configuration["Authentication:Audience"],
-
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:SecretKey"])),
-
-                        RequireExpirationTime = true,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero
-                    };
-                });
-
             services.AddSwaggerGen(c =>
             {
 
@@ -104,14 +73,45 @@ namespace FindThem
                 });
             });
 
-            //services.AddMvc().AddControllersAsServices();
-
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+
+                config.Filters.Add(new AuthorizeFilter(policy));
+            })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddControllersAsServices();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["Authentication:Issuer"],
+
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["Authentication:Audience"],
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Authentication:SecretKey"])),
+
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -139,27 +139,11 @@ namespace FindThem
 
             app.UseHttpsRedirection();
 
-            app.Use(async (context, next) =>
-            {
-                await next();
-                var path = context.Request.Path.Value;
-
-                if (!path.StartsWith("/api") && !Path.HasExtension(path))
-                {
-                    context.Request.Path = "/index.html";
-                    await next();
-                }
-            });
-
             app.UseStaticFiles();
             app.UseDefaultFiles();
 
+            app.UseAuthentication();
             app.UseMvc();
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
         }
     }
 }
