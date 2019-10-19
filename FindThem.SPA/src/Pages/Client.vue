@@ -56,12 +56,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Email *</label>
-                                    <input type="email" class="form-control" required v-model="model.user.email" :disabled="mode == 'remove'">
+                                    <input type="email" class="form-control" required v-model="model.user.email" :disabled="mode == 'remove'" autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Senha</label>
-                                    <input type="password" class="form-control" v-model="model.user.password" v-if="mode == 'edit'" placeholder="Se preencher, será alterado a sua senha">
-                                    <input type="password" class="form-control" v-model="model.user.password" v-else :disabled="mode == 'remove'">
+                                    <input type="password" class="form-control" v-model="model.user.password" v-if="mode == 'edit'" placeholder="Se preencher, será alterado a sua senha" autocomplete="off">
+                                    <input type="password" class="form-control" v-model="model.user.password" v-else :disabled="mode == 'remove'" autocomplete="off">
                                 </div>
                                 <div class="row">
                                     <div class="col-6 text-left">

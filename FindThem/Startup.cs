@@ -17,6 +17,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.FileProviders;
 
 namespace FindThem
 {
@@ -139,7 +140,12 @@ namespace FindThem
 
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "app")),
+                RequestPath = "/app"
+            });
             app.UseDefaultFiles();
 
             app.UseAuthentication();

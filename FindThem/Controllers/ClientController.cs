@@ -15,8 +15,13 @@ namespace FindThem.Controllers
     public class ClientController : ControllerBase
     {
         [HttpGet("FindAll")]
-        public IActionResult findAll(int page)
+        public IActionResult findAll(int page = 1)
         {
+            if (page > 0)
+            {
+                page--;
+            }
+
             var clients = new List<Client>();
 
             using (var db = new FindThemContext())
@@ -24,6 +29,7 @@ namespace FindThem.Controllers
                 clients = db.Clients
                             .Where(x => x.enabled == true)
                             .Include(user => user.user)
+                            .Skip(20 * page).Take(20)
                             .ToList();
             }
 

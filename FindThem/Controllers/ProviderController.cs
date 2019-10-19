@@ -14,8 +14,12 @@ namespace FindThem.Controllers
     public class ProviderController : ControllerBase
     {
         [HttpGet("findAll")]
-        public IActionResult FindAll()
+        public IActionResult FindAll(int page = 1)
         {
+            if (page > 0)
+            {
+                page--;
+            }
             var providers = new List<Provider>();
 
             using (var db = new FindThemContext())
@@ -23,6 +27,7 @@ namespace FindThem.Controllers
                 providers = db.Providers
                             .Where(x => x.enabled == true)
                             .Include(user => user.user)
+                            .Skip(20 * page).Take(20)
                             .ToList();
             }
 
@@ -54,15 +59,31 @@ namespace FindThem.Controllers
             {
                 try
                 {
-                    var user = db.Users.FirstOrDefault(x => x.id == provider.user.id);
+                    var user = db.Users.FirstOrDefault(x => x.email == provider.user.email);
 
-                    if (user != null)
+                    provider.user.password = Utils.GetMd5HashPassword(provider.user.password);
+
+                    if (provider.user.name == string.Empty)
                     {
-                        provider.user = user;
+                        provider.user.name = provider.name;
+                    }
+
+                    if (user == null)
+                    {
+                        provider.user = db.Users.Add(provider.user).Entity;
+                        db.SaveChanges();
                     }
                     else
                     {
-                        provider.user.password = Utils.GetMd5HashPassword(provider.user.password);
+                        user.email = provider.user.email;
+                        user.name = provider.user.name;
+                        user.password = provider.user.password;
+                        user.photo = provider.user.photo;
+
+                        db.Users.Update(user);
+                        db.SaveChanges();
+
+                        provider.user = user;
                     }
 
                     db.Providers.Add(provider);
@@ -70,33 +91,36 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok(provider);
+            return Ok(new { success = true, message = "Register created with success", data = provider });
         }
 
         [HttpPost("edit/{id}")]
-        public IActionResult Edit(Int64 id, string key, string value)
+        public IActionResult Edit([FromBody] Provider provider)
         {
-            Provider provider = new Provider();
 
+            if (provider.user.password != string.Empty)
+            {
+                provider.user.password = Utils.GetMd5HashPassword(provider.user.password);
+            }
 
             using (var db = new FindThemContext())
             {
-                provider = db.Providers
-                           .Include(user => user.user)
-                           .FirstOrDefault(x => x.id == id);
-
-                if (provider == null)
-                {
-                    return NotFound("Provider not found.");
-                }
-
                 try
                 {
-                    provider = Provider.Update(provider, key, value);
+                    var user = db.Users.FirstOrDefault(x => x.id == provider.user.id);
+
+                    user.email = provider.user.email;
+                    user.name = provider.user.name;
+                    user.photo = provider.user.photo;
+
+                    db.Users.Update(user);
+                    db.SaveChanges();
+
+                    provider.user = user;
 
                     db.Providers.Update(provider);
                     db.SaveChanges();
@@ -104,11 +128,11 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return NotFound(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok(provider);
+            return Ok(new { success = true, message = "Register edited with success", data = provider });
         }
 
         [HttpDelete("delete/{id}")]
@@ -129,11 +153,11 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok();
+            return Ok(new { success = true, message = "Register deleted with success" });
         }
     }
 }
