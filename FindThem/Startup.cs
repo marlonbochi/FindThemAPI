@@ -140,12 +140,7 @@ namespace FindThem
 
             app.UseHttpsRedirection();
 
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-            Path.Combine(Directory.GetCurrentDirectory(), "app")),
-                RequestPath = "/app"
-            });
+            app.UseStaticFiles();
             app.UseDefaultFiles();
 
             app.UseAuthentication();

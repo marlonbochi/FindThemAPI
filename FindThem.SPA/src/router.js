@@ -4,6 +4,7 @@ import Home from './Pages/Home.vue';
 import Login from './Pages/Login.vue';
 import Client from './Pages/Client.vue';
 import Provider from './Pages/Provider.vue';
+
 const routes = [
     { path: '/', component: Home },
     { path: '/home', component: Home },
@@ -11,6 +12,7 @@ const routes = [
     { path: '/client', component: Client },
     { path: '/provider', component: Provider },
 ]
+
 Vue.use(VueRouter);
-const router = new VueRouter({ mode: 'history', routes: routes });
+const router = new VueRouter({ mode: 'history', routes });
 export default router;
