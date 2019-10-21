@@ -9,8 +9,8 @@
     </div>
 </template>
 <script>
-    import Services from "../Services/mainServices";
-    import HeaderMenu from "./HeaderMenu.vue";
+    import Services from "../middleware/mainServices";
+    import HeaderMenu from "../components/HeaderMenu.vue";
 
     export default {
         name: "Home",

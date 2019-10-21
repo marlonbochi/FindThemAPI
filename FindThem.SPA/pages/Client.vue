@@ -86,11 +86,11 @@
     </div>
 </template>
 <script>
-    import Services from "../Services/mainServices";
-    import HeaderMenu from "./HeaderMenu.vue";
-    import API from "../Services/apiServices";
-    import dateFormat from "../Filters/Date";
-    import Client from "../Models/Client";
+    import Services from "../middleware/mainServices";
+    import HeaderMenu from "../components/HeaderMenu.vue";
+    import API from "../middleware/apiServices";
+    import dateFormat from "../middleware/Date";
+    import Client from "../store/Client";
 
     export default {
         name: 'client',

@@ -23,7 +23,7 @@
 </template>
 <script>
     import axios from "axios";
-    import Services from "../Services/mainServices";
+    import Services from "../middleware/mainServices";
 
     export default {
         name: 'Login',
@@ -35,6 +35,13 @@
                 services: new Services(),
                 rememberMe: false
             };
+        },
+        mounted: function() {
+            if (window.location.href.indexOf("localhost") > 0) {
+                sessionStorage.setItem("urlAPI", "https://localhost:44357");
+            } else {
+                sessionStorage.setItem("urlAPI", "https://findthem20190819101129.azurewebsites.net");
+            }
         },
         methods: {
             signIn: function () {
