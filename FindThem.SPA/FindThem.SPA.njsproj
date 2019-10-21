@@ -29,12 +29,51 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="nuxt.config.js" />
+    <Content Include="static\favicon.ico" />
+    <Content Include="static\README.md" />
+    <Content Include="store\Client.js" />
+    <Content Include="store\Provider.js" />
+    <Content Include="store\README.md" />
+    <Content Include="store\User.js" />
     <None Include="compilerconfig.json" />
     <Content Include="compilerconfig.json.defaults">
       <SubType>Content</SubType>
       <DependentUpon>compilerconfig.json</DependentUpon>
     </Content>
     <None Include="CustomProfile.pubxml" />
+    <Content Include="dist\.nojekyll" />
+    <Content Include="dist\200.html" />
+    <Content Include="dist\Client\index.html" />
+    <Content Include="dist\favicon.ico" />
+    <Content Include="dist\Home\index.html" />
+    <Content Include="dist\index.html" />
+    <Content Include="dist\Login\index.html" />
+    <Content Include="dist\Provider\index.html" />
+    <Content Include="dist\README.md" />
+    <Content Include="dist\_nuxt\252a3df8b23c030b85d5.js" />
+    <Content Include="dist\_nuxt\349d820dc79a8b0273bc.js" />
+    <Content Include="dist\_nuxt\392658ab860068c447b0.js" />
+    <Content Include="dist\_nuxt\6bc52990662b4d15861b.js" />
+    <Content Include="dist\_nuxt\6c81a50f07387131c979.js" />
+    <Content Include="dist\_nuxt\89c039b547d1ee7cd591.js" />
+    <Content Include="dist\_nuxt\a5f02a71c0c8e692a3ce.js" />
+    <Content Include="dist\_nuxt\bbd325be5af33779f163.js" />
+    <Content Include="dist\_nuxt\cbb31a23ba1c1dd1c681.js" />
+    <Content Include="dist\_nuxt\LICENSES" />
+    <Content Include="layouts\default.vue" />
+    <Content Include="layouts\README.md" />
+    <Content Include="middleware\apiServices.js" />
+    <Content Include="middleware\Date.js" />
+    <Content Include="middleware\mainServices.js" />
+    <Content Include="middleware\README.md" />
+    <Content Include="pages\Client.vue" />
+    <Content Include="pages\Home.vue" />
+    <Content Include="pages\index.vue" />
+    <Content Include="pages\Login.vue" />
+    <Content Include="pages\Provider.vue" />
+    <Content Include="pages\README.md" />
+    <Content Include="plugins\README.md" />
     <Content Include="public\css\login.css" />
     <Content Include="public\css\login.min.css" />
     <Content Include="public\css\login.scss" />
@@ -55,16 +94,28 @@
     <Content Include="src\Services\mainServices.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="assets\" />
+    <Folder Include="components\" />
     <Folder Include="dist\" />
+    <Folder Include="dist\Client\" />
+    <Folder Include="dist\Home\" />
+    <Folder Include="dist\Login\" />
+    <Folder Include="dist\Provider\" />
+    <Folder Include="dist\_nuxt\" />
+    <Folder Include="layouts\" />
+    <Folder Include="middleware\" />
+    <Folder Include="pages\" />
+    <Folder Include="plugins\" />
     <Folder Include="public\" />
     <Folder Include="public\css\" />
     <Folder Include="src\" />
     <Folder Include="src\assets\" />
     <Folder Include="src\Pages\" />
     <Folder Include="src\Services\" />
+    <Folder Include="static\" />
+    <Folder Include="store\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="babel.config.js" />
     <Content Include="src\main.js" />
   </ItemGroup>
   <PropertyGroup>
