@@ -8,8 +8,6 @@ namespace FindThem.Models
     [Table("user")]
     public class User : Shared
     {
-        public Int64 id { get; set; }
-
         [Required]
         public string name { get; set; }
 
