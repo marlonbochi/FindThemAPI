@@ -22,11 +22,17 @@ namespace FindThem.Models
 
         public string number { get; set; }
 
+        public string complement { get; set; }
+
         public string neighborhood { get; set; }
 
         public string city { get; set; }
 
         public string state { get; set; }
+
+        public double? latitude { get; set; }
+
+        public double? longitude { get; set; }
 
         public bool enabled { get; set; }
 

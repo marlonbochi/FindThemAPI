@@ -73,11 +73,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Número</label>
-                                    <input type="number" class="form-control" required v-model="model.number" :disabled="mode == 'remove'">
+                                    <input type="text" class="form-control" required v-model="model.number" :disabled="mode == 'remove'">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Complemento</label>
-                                    <input type="text" class="form-control" required v-model="model.complement" :disabled="mode == 'remove'">
+                                    <input type="text" class="form-control" v-model="model.complement" :disabled="mode == 'remove'">
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Bairro</label>
@@ -86,6 +86,10 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Cidade</label>
                                     <input type="text" class="form-control" required v-model="model.city" disabled="true">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">UF</label>
+                                    <input type="text" class="form-control" required v-model="model.state" disabled="true">
                                 </div>
                                 <div class="row">
                                     <div class="col-6 text-left">

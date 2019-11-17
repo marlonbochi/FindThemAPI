@@ -8,4 +8,11 @@ export default class Provider {
     rateAVG = 0;
     enabled = 1;
     user = new User();
+    city = "";
+    neighborhood = "";
+    address = "";
+    state = "";
+    cep = "";
+    number = "";
+    complement = "";
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace FindThem.Controllers
 {
@@ -13,6 +14,12 @@ namespace FindThem.Controllers
     [Authorize]
     public class ProviderController : ControllerBase
     {
+        private readonly IConfiguration _config;
+
+        public ProviderController(IConfiguration config)
+        {
+            _config = config;
+        }
         [HttpGet("findAll")]
         public IActionResult FindAll(int page = 1)
         {
@@ -86,6 +93,18 @@ namespace FindThem.Controllers
                         provider.user = user;
                     }
 
+                    var utils = new Utils();
+
+                    var addressComplete = string.Format("{0} {1} {2} {3} {4}", provider.address, provider.number, provider.neighborhood, provider.city, provider.state);
+
+                    var geometry = utils.getLatitudeLongitude(_config["API_KEY_GOOGLE_MAPS"], addressComplete);
+
+                    if (geometry != null)
+                    {
+                        provider.latitude = geometry.location.lat;
+                        provider.longitude = geometry.location.lng;
+                    }
+
                     db.Providers.Add(provider);
                     db.SaveChanges();
                 }
@@ -121,6 +140,18 @@ namespace FindThem.Controllers
                     db.SaveChanges();
 
                     provider.user = user;
+
+                    var utils = new Utils();
+
+                    var addressComplete = string.Format("{0} {1} {2} {3} {4}", provider.address, provider.number, provider.neighborhood, provider.city, provider.state);
+
+                    var geometry = utils.getLatitudeLongitude(_config["API_KEY_GOOGLE_MAPS"], addressComplete);
+
+                    if (geometry != null)
+                    {
+                        provider.latitude = geometry.location.lat;
+                        provider.longitude = geometry.location.lng;
+                    }
 
                     db.Providers.Update(provider);
                     db.SaveChanges();
