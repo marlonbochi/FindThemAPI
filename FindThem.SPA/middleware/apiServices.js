@@ -67,4 +67,10 @@ export default class Api {
 
         return data.data
     }
+
+    async getCep($cep) {
+        let data = await Axios.get("https://viacep.com.br/ws/" + $cep + "/json/");
+
+        return data.data
+    }
 }

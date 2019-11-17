@@ -63,6 +63,30 @@
                                     <input type="password" class="form-control" v-model="model.user.password" v-if="mode == 'edit'" placeholder="Se preencher, será alterado a sua senha" autocomplete="off">
                                     <input type="password" class="form-control" v-model="model.user.password" v-else :disabled="mode == 'remove'" autocomplete="off">
                                 </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">CEP</label>
+                                    <input type="text" class="form-control" required v-model="model.cep" :disabled="mode == 'remove'" @change="searchCep">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Endereço</label>
+                                    <input type="text" class="form-control" required v-model="model.address" :disabled="mode == 'remove'" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Número</label>
+                                    <input type="number" class="form-control" required v-model="model.number" :disabled="mode == 'remove'">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Complemento</label>
+                                    <input type="text" class="form-control" required v-model="model.complement" :disabled="mode == 'remove'">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Bairro</label>
+                                    <input type="text" class="form-control" required v-model="model.neighborhood" :disabled="mode == 'remove'">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Cidade</label>
+                                    <input type="text" class="form-control" required v-model="model.city" disabled="true">
+                                </div>
                                 <div class="row">
                                     <div class="col-6 text-left">
                                         <button type="button" class="btn btn-secondary" @click="cancel">Cancelar</button>
@@ -116,7 +140,8 @@
                 var self = this;
 
                 if (self.mode == 'edit') {
-                    self.api.edit("/api/provider/edit", self.model).then(function(data) {
+                    console.log(self.model);
+                    self.api.edit("/api/provider/edit/" + self.model.id, self.model).then(function(data) {
                         if (data.success) {
                             self.mode = "list";
                             self.findAll();
@@ -202,6 +227,18 @@
                 var self = this;
                 self.api.findAll("/api/provider/FindAll").then(function(rows) {
                     self.rows = rows;
+                });
+            },
+
+            searchCep: function() {
+                var self = this;
+                self.api.getCep(self.model.cep).then(function(fullAddress) {
+
+                    self.model.city = fullAddress.localidade;
+                    self.model.neighborhood = fullAddress.bairro;
+                    self.model.address = fullAddress.logradouro;
+                    self.model.state = fullAddress.uf;
+
                 });
             }
         }

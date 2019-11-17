@@ -16,6 +16,18 @@ namespace FindThem.Models
 
         public float? rateAVG { get; set; }
 
+        public string CEP { get; set; }
+
+        public string address { get; set; }
+
+        public string number { get; set; }
+
+        public string neighborhood { get; set; }
+
+        public string city { get; set; }
+
+        public string state { get; set; }
+
         public bool enabled { get; set; }
 
         public static Provider Update(Provider provider, string key, string value)

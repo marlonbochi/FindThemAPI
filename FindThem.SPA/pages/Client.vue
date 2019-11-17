@@ -116,7 +116,7 @@
                 var self = this;
 
                 if (self.mode == 'edit') {
-                    self.api.edit("/api/client/edit", self.model).then(function(data) {
+                    self.api.edit("/api/client/edit" + self.model.id, self.model).then(function(data) {
                         if (data.success) {
                             self.mode = "list";
                             self.findAll();
