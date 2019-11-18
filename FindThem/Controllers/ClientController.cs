@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FindThem.Controllers
 {
@@ -37,9 +38,44 @@ namespace FindThem.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult get(Int64 id)
+        public IActionResult get(Int64 id = 0)
         {
             var client = new Client();
+
+            if (id == 0)
+            {
+                var identity = HttpContext.User.Identity as ClaimsIdentity;
+                if (identity != null)
+                {
+                    id = Convert.ToInt64(identity.FindFirst("userId").Value);
+                }
+            }
+
+            using (var db = new FindThemContext())
+            {
+                client = db.Clients
+                            .Where(x => x.enabled == true)
+                           .Include(user => user.user)
+                           .FirstOrDefault(x => x.id == id);
+
+                client.user.password = "";
+            }
+
+            return Ok(client);
+        }
+
+        [HttpGet]
+        public IActionResult getWithoutId()
+        {
+            var client = new Client();
+
+            Int64 id = 0;
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                id = Convert.ToInt64(identity.FindFirst("userId").Value);
+            }
 
             using (var db = new FindThemContext())
             {

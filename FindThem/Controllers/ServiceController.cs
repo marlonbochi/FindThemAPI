@@ -14,7 +14,7 @@ namespace FindThem.Controllers
     public class ServiceController : ControllerBase
     {
         [HttpGet("findAll")]
-        public IActionResult FindAll()
+        public IActionResult FindAll(Int64 idProvider)
         {
             var clients = new List<Service>();
 
@@ -22,6 +22,20 @@ namespace FindThem.Controllers
             {
                 clients = db.Services
                             .Where(x => x.enabled == true)
+                            .ToList();
+            }
+
+            return Ok(clients);
+        }
+        [HttpGet("findAll/{providerID}")]
+        public IActionResult FindProviderServices(Int64 providerID)
+        {
+            var clients = new List<Service>();
+
+            using (var db = new FindThemContext())
+            {
+                clients = db.Services
+                            .Where(x => x.enabled == true && x.providerID == providerID)
                             .ToList();
             }
 

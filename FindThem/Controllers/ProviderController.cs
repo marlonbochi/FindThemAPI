@@ -20,6 +20,7 @@ namespace FindThem.Controllers
         {
             _config = config;
         }
+
         [HttpGet("findAll")]
         public IActionResult FindAll(int page = 1)
         {
@@ -52,6 +53,8 @@ namespace FindThem.Controllers
                             .Where(x => x.enabled == true)
                            .Include(user => user.user)
                            .FirstOrDefault(x => x.id == id);
+
+                provider.user.password = "";
 
             }
 
