@@ -77,26 +77,13 @@ namespace FindThem.Controllers
             return Ok(service);
         }
 
-        [HttpPost("edit/{id}")]
-        public IActionResult Edit(Int64 id, string key, string value)
+        [HttpPost("edit")]
+        public IActionResult Edit([FromBody]Service service)
         {
-            Service service = new Service();
-
-
             using (var db = new FindThemContext())
             {
-                service = db.Services
-                           .FirstOrDefault(x => x.id == id);
-
-                if (service == null)
-                {
-                    return NotFound("Service not found.");
-                }
-
                 try
                 {
-                    service = Service.Update(service, key, value);
-
                     service.dateUpdated = DateTime.Now;
 
                     db.Services.Update(service);

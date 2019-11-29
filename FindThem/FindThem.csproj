@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\Projetos\C#\FindThem\FindThem\FindThem.xml</DocumentationFile>
+    <DocumentationFile>C:\Projects\C#\FindThemAPI\FindThem\FindThem.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,12 +26,6 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
-    <None Include="wwwroot\css\login.scss" />
-    <None Include="wwwroot\css\main.scss" />
-    <None Include="wwwroot\js\app.aedebe51.js" />
-    <None Include="wwwroot\js\app.aedebe51.js.map" />
-    <None Include="wwwroot\js\chunk-vendors.73a52b35.js" />
-    <None Include="wwwroot\js\chunk-vendors.73a52b35.js.map" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="app\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
