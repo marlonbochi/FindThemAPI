@@ -18,6 +18,7 @@
                 <nuxt-link to="/" class="p-2 text-muted" v-bind:class="{'selected': route == '' }">Home</nuxt-link>
                 <nuxt-link to="/client" class="p-2 text-muted" v-bind:class="{'selected': route == 'client' }">Clientes</nuxt-link>
                 <nuxt-link to="/provider" class="p-2 text-muted" v-bind:class="{'selected': route == 'provider' }">Prestador de serviços</nuxt-link>
+                <nuxt-link to="/service" class="p-2 text-muted" v-bind:class="{'selected': route == 'service' }">Serviços</nuxt-link>
             </nav>
         </div>
     </div>
@@ -35,11 +36,11 @@
         },
         mounted: function () {
 
-            if (window.location.href.indexOf("localhost") > 0) {
-                sessionStorage.setItem("urlAPI", "https://localhost:5001");
-            } else {
+            // if (window.location.href.indexOf("localhost") > 0) {
+            //     sessionStorage.setItem("urlAPI", "https://localhost:5001");
+            // } else {
                 sessionStorage.setItem("urlAPI", "https://findthem20190819101129.azurewebsites.net");
-            }
+            // }
             
             this.services.validateToken();
             this.defineRouteName(this.$router.currentRoute.path);
