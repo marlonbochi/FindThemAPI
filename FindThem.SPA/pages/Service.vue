@@ -171,7 +171,7 @@
 
                 self.title = " > Adicionar"
 
-                self.model = new Client();
+                self.model = new Service();
 
                 self.api.findAll("/api/provider/FindAll").then(function(rows) {
                     self.providers = rows;

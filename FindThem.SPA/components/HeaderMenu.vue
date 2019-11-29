@@ -36,11 +36,11 @@
         },
         mounted: function () {
 
-            // if (window.location.href.indexOf("localhost") > 0) {
-            //     sessionStorage.setItem("urlAPI", "https://localhost:5001");
-            // } else {
+            if (window.location.href.indexOf("localhost") > 0) {
+                sessionStorage.setItem("urlAPI", "https://localhost:5001");
+            } else {
                 sessionStorage.setItem("urlAPI", "https://findthem20190819101129.azurewebsites.net");
-            // }
+            }
             
             this.services.validateToken();
             this.defineRouteName(this.$router.currentRoute.path);
