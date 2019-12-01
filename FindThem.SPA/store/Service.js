@@ -1,3 +1,5 @@
+import Provider from "./Provider";
+
 export default class Service {
 
     id = 0;
@@ -6,6 +8,6 @@ export default class Service {
     price = 0;
     description = "";
     materials = "";
-    providerID = 0;
+    provider = new Provider();
     enabled = 1;
 }

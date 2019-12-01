@@ -67,10 +67,12 @@
                     if (self.rememberMe) {
                         self.services.setCookie("tokenID", data.token, 7);
                         self.services.setCookie("tokenExpiration", data.expiration, 7);
+                        self.services.setCookie("kindUser", data.kind, 7);
                     }
 
                     sessionStorage.setItem('tokenID', data.token);
                     sessionStorage.setItem('tokenExpiration', data.expiration);
+                    sessionStorage.setItem('kindUser', data.kind);
 
                     self.$router.push("/");
                     

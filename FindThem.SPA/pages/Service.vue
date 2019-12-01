@@ -30,7 +30,7 @@
                                         <th scope="row">{{row.id}}</th>
                                         <td>{{row.name}}</td>
                                         <td>{{row.price}}</td>
-                                        <td>{{row.providerID}}</td>
+                                        <td>{{row.provider.name}}</td>
                                         <td>
                                             <button class="btn btn-sm btn-warning btn-margin-right" @click="edit(row.id)"><i class="fa fa-edit" aria-hidden="true"></i></button>
                                             <button class="btn btn-sm btn-danger" @click="remove(row.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Prestador de serviço</label>
-                                    <select class="form-control" v-model="model.providerID" :disabled="mode == 'remove'">
+                                    <select class="form-control" v-model="model.provider.id" :disabled="mode == 'remove'">
                                         <option value="">Selecione um prestador</option>
                                         <option v-for="provider in providers" v-bind:key="provider.id" :value="provider.id">
                                             {{provider.name}}
@@ -121,7 +121,8 @@
                 model: new Service(),
                 api: new API(),
                 rows: [],
-                providers: []
+                providers: [],
+                kindUser: sessionStorage.getItem("kindUser")
             };
         },
         mounted: function() {
@@ -223,6 +224,8 @@
                 self.model = new Object();
 
                 self.findAll();
+
+                self.message = "";
             },
 
             findAll: function() {

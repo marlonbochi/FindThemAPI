@@ -65,7 +65,8 @@ namespace FindThem.Controllers
             var jwtToken = new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                expiration = token.ValidTo,
+                kind = user.kind
             };
 
             return Ok(jwtToken);

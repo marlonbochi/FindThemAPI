@@ -16,36 +16,10 @@ namespace FindThem.Models
 
         public string materials { get; set; }
 
-        public Int64 providerID { get; set; }
+        [ForeignKey("providerID")]
+        public Provider provider { get; set; }
 
         public bool enabled { get; set; }
 
-        public static Service Update(Service service, string key, string value)
-        {
-            switch (key)
-            {
-                case "name":
-                    service.name = value;
-                    break;
-                case "description":
-                    service.description = value;
-                    break;
-                case "materials":
-                    service.materials = value;
-                    break;
-                case "price":
-                    service.price = float.Parse(value);
-                    break;
-                case "timeExecution":
-                    service.timeExecution = float.Parse(value);
-                    break;
-                default:
-                    throw new Exception("Key not found.");
-            }
-
-            service.dateUpdated = DateTime.Now;
-
-            return service;
-        }
     }
 }

@@ -9,7 +9,7 @@
                 <div class="col-12">
                     <div class="row firstRow">
                         <div class="col-12 text-right">
-                            <button class="btn btn-primary" @click="add">Adicionar</button>
+                            <button class="btn btn-primary" v-if="kindUser != 'user'" @click="add">Adicionar</button>
                         </div>
                     </div>
 
@@ -35,7 +35,7 @@
                                         <td>{{row.dateInserted | dateFormat}}</td>
                                         <td>
                                             <button class="btn btn-sm btn-warning btn-margin-right" @click="edit(row.id)"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                                            <button class="btn btn-sm btn-danger" @click="remove(row.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                            <button class="btn btn-sm btn-danger" v-if="kindUser != 'user'" @click="remove(row.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>                                    
                                 </tbody>
@@ -57,6 +57,14 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Email *</label>
                                     <input type="email" class="form-control" required v-model="model.user.email" :disabled="mode == 'remove'" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Tipo de acesso *</label>
+                                    <select class="form-control" v-if="kindUser != 'user'" required v-model="model.user.kind" :disabled="mode == 'remove'" >
+                                        <option value="">Selecione um tipo</option>
+                                        <option value="user">Usuário</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Senha</label>
@@ -133,7 +141,8 @@
                 title: "",
                 model: new Provider(),
                 api: new API(),
-                rows: []
+                rows: [],
+                kindUser: sessionStorage.getItem("kindUser")
             };
         },
         mounted: function() {

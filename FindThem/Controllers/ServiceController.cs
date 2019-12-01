@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FindThem.Controllers
 {
@@ -16,30 +17,54 @@ namespace FindThem.Controllers
         [HttpGet("findAll")]
         public IActionResult FindAll(Int64 idProvider)
         {
-            var clients = new List<Service>();
+            var services = new List<Service>();
+
+
+            long id = 0;
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                id = Convert.ToInt64(identity.FindFirst("userId").Value);
+            }
+
+            var kindUser = FindThem.Models.User.getKindUser(id);
+
 
             using (var db = new FindThemContext())
             {
-                clients = db.Services
+                if (kindUser == "admin")
+                {
+                    services = db.Services
                             .Where(x => x.enabled == true)
+                            .Include(x => x.provider)
                             .ToList();
+                } else
+                {
+                    services = db.Services
+                            .Where(x => x.enabled == true && x.provider.user.id == id)
+                            .Include(x => x.provider)
+                            .ToList();
+                }
             }
 
-            return Ok(clients);
+            return Ok(services);
         }
+
         [HttpGet("findAll/{providerID}")]
         public IActionResult FindProviderServices(Int64 providerID)
         {
-            var clients = new List<Service>();
+            var services = new List<Service>();
 
             using (var db = new FindThemContext())
             {
-                clients = db.Services
-                            .Where(x => x.enabled == true && x.providerID == providerID)
+                services = db.Services
+                            .Where(x => x.enabled == true && x.provider.id == providerID)
+                            .Include(x => x.provider)
                             .ToList();
             }
 
-            return Ok(clients);
+            return Ok(services);
         }
 
         [HttpGet("{id}")]
@@ -51,6 +76,7 @@ namespace FindThem.Controllers
             {
                 service = db.Services
                             .Where(x => x.enabled == true)
+                            .Include(x => x.provider)
                            .FirstOrDefault(x => x.id == id);
 
             }
@@ -63,18 +89,27 @@ namespace FindThem.Controllers
         {
             using (var db = new FindThemContext())
             {
-                var provider = db.Providers.FirstOrDefault(x => x.id == service.providerID);
-
-                if (provider == null)
+                try
                 {
-                    return NotFound("Provider not found.");
-                }
+                    var provider = db.Providers.Include(x => x.user).FirstOrDefault(x => x.id == service.provider.id);
 
-                db.Services.Add(service);
-                db.SaveChanges();
+                    if (provider == null)
+                    {
+                        throw new Exception("Provider not found.");
+                    }
+
+                    service.provider = provider;
+
+                    db.Services.Add(service);
+                    db.SaveChanges();
+                } 
+                catch (Exception ex) 
+                {
+                    return Ok(new { success = false, message = ex.Message });
+                }
             }
 
-            return Ok(service);
+            return Ok(new { success = true, message = "Register created with success", data = service });
         }
 
         [HttpPost("edit")]
@@ -84,7 +119,16 @@ namespace FindThem.Controllers
             {
                 try
                 {
+                    var provider = db.Providers.Include(x => x.user).FirstOrDefault(x => x.id == service.provider.id);
+
+                    if (provider == null)
+                    {
+                        return NotFound("Provider not found.");
+                    }
+
                     service.dateUpdated = DateTime.Now;
+
+                    service.provider = provider;
 
                     db.Services.Update(service);
                     db.SaveChanges();
@@ -92,11 +136,11 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return NotFound(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok(service);
+            return Ok(new { success = true, message = "Register edited with success", data = service });
         }
 
         [HttpDelete("delete/{id}")]
@@ -117,11 +161,11 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok();
+            return Ok(new { success = true, message = "Register deleted with success" });
         }
     }
 }

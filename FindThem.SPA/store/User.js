@@ -3,4 +3,5 @@ export default class User {
     name = "";
     photo = "";
     password = "";
+    kind = "user";
 }

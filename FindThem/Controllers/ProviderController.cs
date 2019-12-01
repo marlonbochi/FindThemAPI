@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
 
 namespace FindThem.Controllers
 {
@@ -30,13 +31,34 @@ namespace FindThem.Controllers
             }
             var providers = new List<Provider>();
 
+            long id = 0;
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                id = Convert.ToInt64(identity.FindFirst("userId").Value);
+            }
+
+            var kindUser = FindThem.Models.User.getKindUser(id);
+
             using (var db = new FindThemContext())
             {
-                providers = db.Providers
+                if (kindUser == "admin")
+                {
+                    providers = db.Providers
                             .Where(x => x.enabled == true)
                             .Include(user => user.user)
                             .Skip(20 * page).Take(20)
                             .ToList();
+                } else
+                {
+                    providers = db.Providers
+                            .Where(x => x.enabled == true && x.user.id == id)
+                            .Include(user => user.user)
+                            .Skip(20 * page).Take(20)
+                            .ToList();
+
+                }
             }
 
             return Ok(providers);

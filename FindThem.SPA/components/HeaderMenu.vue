@@ -54,6 +54,7 @@
             logout: function () {
                 this.services.eraseCookie("tokenID");
                 this.services.eraseCookie("tokenExpiration");
+                this.services.eraseCookie("kindUser");
 
                 sessionStorage.clear();
 

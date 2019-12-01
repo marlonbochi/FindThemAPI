@@ -9,7 +9,7 @@
                 <div class="col-12">
                     <div class="row firstRow">
                         <div class="col-12 text-right">
-                            <button class="btn btn-primary" @click="add">Adicionar</button>
+                            <button  v-if="kindUser != 'user'" class="btn btn-primary" @click="add">Adicionar</button>
                         </div>
                     </div>
 
@@ -35,7 +35,7 @@
                                         <td>{{row.dateInserted | dateFormat}}</td>
                                         <td>
                                             <button class="btn btn-sm btn-warning btn-margin-right" @click="edit(row.id)"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                                            <button class="btn btn-sm btn-danger" @click="remove(row.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                            <button class="btn btn-sm btn-danger" v-if="kindUser != 'user'" @click="remove(row.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                         </td>
                                     </tr>                                    
                                 </tbody>
@@ -62,6 +62,14 @@
                                     <label for="exampleInputPassword1">Senha</label>
                                     <input type="password" class="form-control" v-model="model.user.password" v-if="mode == 'edit'" placeholder="Se preencher, será alterado a sua senha" autocomplete="off">
                                     <input type="password" class="form-control" v-model="model.user.password" v-else :disabled="mode == 'remove'" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Tipo de acesso *</label>
+                                    <select class="form-control" v-if="kindUser != 'user'" required v-model="model.user.kind" :disabled="mode == 'remove'" >
+                                        <option value="">Selecione um tipo</option>
+                                        <option value="user">Usuário</option>
+                                        <option value="admin">Administrador</option>
+                                    </select>
                                 </div>
                                 <div class="row">
                                     <div class="col-6 text-left">
@@ -105,7 +113,8 @@
                 title: "",
                 model: new Client(),
                 api: new API(),
-                rows: []
+                rows: [],
+                kindUser: sessionStorage.getItem("kindUser")
             };
         },
         mounted: function() {
@@ -199,6 +208,7 @@
 
             findAll: function() {
                 var self = this;
+                
                 self.api.findAll("/api/client/FindAll").then(function(rows) {
                     self.rows = rows;
                 });

@@ -23,22 +23,42 @@ namespace FindThem.Controllers
                 page--;
             }
 
+            long id = 0;
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                id = Convert.ToInt64(identity.FindFirst("userId").Value);
+            }
+
+            var kindUser = FindThem.Models.User.getKindUser(id);
+
             var clients = new List<Client>();
 
             using (var db = new FindThemContext())
             {
-                clients = db.Clients
-                            .Where(x => x.enabled == true)
-                            .Include(user => user.user)
-                            .Skip(20 * page).Take(20)
-                            .ToList();
+                if (kindUser == "admin")
+                {
+                    clients = db.Clients
+                                .Where(x => x.enabled == true)
+                                .Include(user => user.user)
+                                .Skip(20 * page).Take(20)
+                                .ToList();
+                } else
+                {
+                    clients = db.Clients
+                                .Where(x => x.enabled == true && x.user.id == id)
+                                .Include(user => user.user)
+                                .Skip(20 * page).Take(20)
+                                .ToList();
+                }
             }
 
             return Ok(clients);
         }
 
         [HttpGet("{id}")]
-        public IActionResult get(Int64 id = 0)
+        public IActionResult get(long id = 0)
         {
             var client = new Client();
 
@@ -69,7 +89,7 @@ namespace FindThem.Controllers
         {
             var client = new Client();
 
-            Int64 id = 0;
+            long id = 0;
 
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             if (identity != null)
@@ -104,8 +124,9 @@ namespace FindThem.Controllers
 
                     if (user == null)
                     {
-                        client.user = db.Users.Add(client.user).Entity;
+                        db.Users.Add(client.user);
                         db.SaveChanges();
+                        client.user = db.Users.Add(client.user).Entity;
                     } else
                     {
                         user.email = client.user.email;
@@ -124,7 +145,7 @@ namespace FindThem.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return Ok(new { success = false, message = ex.Message });
+                    return Ok(new { success = false, message = ex.InnerException.Message });
                 }
             }
 
