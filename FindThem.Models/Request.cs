@@ -26,15 +26,18 @@ namespace FindThem.Models
         public DateTime dateEnd{ get; set; }
 
         public string description { get; set; }
-
-
+        
         [Required]
-        public Int64 cep { get; set; }
+        public long cep { get; set; }
 
         [Required]
         public string address { get; set; }
 
-        public Int64? numberAddress { get; set; }
+        public string numberAddress { get; set; }
+
+        public string complementAddress { get; set; }
+
+        public string neighborhoodAddress { get; set; }
 
         [Required]
         public string city { get; set; }

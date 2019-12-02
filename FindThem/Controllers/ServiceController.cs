@@ -15,10 +15,9 @@ namespace FindThem.Controllers
     public class ServiceController : ControllerBase
     {
         [HttpGet("findAll")]
-        public IActionResult FindAll(Int64 idProvider)
+        public IActionResult FindAll()
         {
             var services = new List<Service>();
-
 
             long id = 0;
 
@@ -52,7 +51,7 @@ namespace FindThem.Controllers
         }
 
         [HttpGet("findAll/{providerID}")]
-        public IActionResult FindProviderServices(Int64 providerID)
+        public IActionResult FindProviderServices(long providerID)
         {
             var services = new List<Service>();
 

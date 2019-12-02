@@ -6,15 +6,12 @@ namespace FindThem.Models
     [Table("rate")]
     public class Rate : Shared
     {
-        [ForeignKey("requestID")]
         [Required]
-        public Request request { get; set; }
+        public long requestID { get; set; }
 
-        [ForeignKey("clientID")]
-        public Client client { get; set; }
+        public long clientID { get; set; }
 
-        [ForeignKey("providerID")]
-        public Provider provider { get; set; }
+        public long providerID { get; set; }
 
         [Required]
         public int rate { get; set; }

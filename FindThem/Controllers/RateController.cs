@@ -15,7 +15,7 @@ namespace FindThem.Controllers
     public class RateController : ControllerBase
     {
         [HttpGet("{id}")]
-        public IActionResult Get(Int64 id)
+        public IActionResult Get(long id)
         {
             var rate = new Rate();
 
@@ -42,15 +42,16 @@ namespace FindThem.Controllers
             {
                 try
                 {
-                    rate = db.Rates
-                                .Add(rate).Entity;
+                    db.Rates.Add(rate);
+                    db.SaveChanges();
+
                 } catch(Exception ex)
                 {
-                    return BadRequest(ex.Message);
+                    return Ok(new { success = false, message = ex.Message });
                 }
             }
 
-            return Ok(rate);
+            return Ok(new { success = true, message = "Register created with success", data = rate });
         }
     }
 }
