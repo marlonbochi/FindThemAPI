@@ -15,7 +15,7 @@ namespace FindThem.Models
         [Required]
         public Provider provider { get; set; }
 
-        [ForeignKey("servideID")]
+        [ForeignKey("serviceID")]
         [Required]
         public Service service { get; set; }
 

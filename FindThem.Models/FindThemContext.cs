@@ -25,15 +25,6 @@ namespace FindThem.Models
             modelBuilder.Entity<Provider>()
                 .Property<Int64>("userID");
 
-            modelBuilder.Entity<Request>()
-                .Property<Int64>("clientID");
-
-            modelBuilder.Entity<Request>()
-                .Property<Int64>("providerID");
-
-            modelBuilder.Entity<Request>()
-                .Property<Int64>("serviceID");
-
             modelBuilder.Entity<Service>()
                 .Property<Int64>("providerID");
 
@@ -45,6 +36,15 @@ namespace FindThem.Models
 
             modelBuilder.Entity<Log>()
                 .Property<Int64>("userID");
+
+            modelBuilder.Entity<Request>()
+                .Property<Int64>("clientID");
+
+            modelBuilder.Entity<Request>()
+                .Property<Int64>("providerID");
+
+            modelBuilder.Entity<Request>()
+                .Property<Int64>("serviceID");
 
         }
 
