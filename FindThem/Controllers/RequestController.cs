@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FindThem.Models;
@@ -25,6 +26,11 @@ namespace FindThem.Controllers
                 {
                     request = db.Requests
                                 .Where(x => x.id == requestID)
+                                .Include(x => x.client)
+                                    .ThenInclude(x => x.user)
+                                .Include(x => x.provider)
+                                    .ThenInclude(x => x.user)
+                                .Include(x => x.service)
                                 .FirstOrDefault();
                 }
                 catch (Exception ex)
@@ -57,6 +63,11 @@ namespace FindThem.Controllers
                 {
                     requests = db.Requests
                                  .Where(x => x.enabled == true && x.client.user.id == id)
+                                 .Include(x => x.client)
+                                    .ThenInclude(x => x.user)
+                                 .Include(x => x.provider)
+                                    .ThenInclude(x => x.user)
+                                 .Include(x => x.service)
                                  .ToList();
                 }
                 catch (Exception ex)

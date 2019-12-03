@@ -37,14 +37,15 @@ namespace FindThem.Models
             modelBuilder.Entity<Log>()
                 .Property<Int64>("userID");
 
-            modelBuilder.Entity<Request>()
-                .Property<Int64>("clientID");
 
             modelBuilder.Entity<Request>()
-                .Property<Int64>("providerID");
+                .Property<long>("clientID");
 
             modelBuilder.Entity<Request>()
-                .Property<Int64>("serviceID");
+                .Property<long>("providerID");
+
+            modelBuilder.Entity<Request>()
+                .Property<long>("serviceID");
 
         }
 
