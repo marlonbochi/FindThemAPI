@@ -88,14 +88,18 @@ namespace FindThem.Controllers
                 {
                     var client = db.Clients
                                 .Where(x => x.id == request.client.id)
+                                    .Include(x => x.user)
                                 .FirstOrDefault();
 
                     var provider = db.Providers
                                 .Where(x => x.id == request.provider.id)
+                                    .Include(x => x.user)
                                 .FirstOrDefault();
 
                     var service = db.Services
                                 .Where(x => x.id == request.service.id)
+                                    .Include(x => x.provider)
+                                        .ThenInclude(x => x.user)
                                 .FirstOrDefault();
 
                     request.client = client;
@@ -103,10 +107,15 @@ namespace FindThem.Controllers
                     request.service = service;
 
                     db.Requests.Add(request);
+
+                    db.Entry(request.client).State = EntityState.Unchanged;
+                    db.Entry(request.provider).State = EntityState.Unchanged;
+                    db.Entry(request.service).State = EntityState.Unchanged;
+
                     db.SaveChanges();
                 } catch (Exception ex)
                 {
-                    return Ok(new { success = false, message = ex.Message });
+                    return Ok(new { success = false, message = ex.InnerException.Message });
                 }
             }
 

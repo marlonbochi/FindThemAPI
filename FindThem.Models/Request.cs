@@ -37,5 +37,7 @@ namespace FindThem.Models
         public bool enabled { get; set; }
 
         public char status { get; set; }
+
+        public float value { get; set; }
     }
 }
